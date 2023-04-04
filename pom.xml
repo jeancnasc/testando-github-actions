@@ -13,6 +13,16 @@
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M2</version>
+			</plugin>
+		</plugins>
+	</build>
+
   <dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -35,6 +45,7 @@
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
 			<version>3.24.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
