@@ -10,6 +10,6 @@ public class AppTest
 
     @Test
     public void test(){
-        assertThat(new App().mensagem()).isEqualTo("Erro!");
+        assertThat(new App().mensagem()).isEqualTo("Hello World!");
     }
 }
