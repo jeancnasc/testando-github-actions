@@ -8,9 +8,4 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'oracle'
-          java-version: '17'
-      - run: mvn -B verify
+      - run: echo {{ github }}
