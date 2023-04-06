@@ -46,7 +46,7 @@ jobs:
         git push origin release/${{ github.event.inputs.version }}
     - run: mkdir artifacts
     - name: Build with Maven
-      run: mvn -B package --file pom.xml dependency:copy -Dartifact=${project.groupId}:${project.artifactId}:${project.version} -DoutputDirectory=artifacts    
+      run: mvn -B package --file pom.xml dependency:copy -Dartifact=\${project.groupId}:\${project.artifactId}:\${project.version} -DoutputDirectory=artifacts    
     - uses: actions/upload-artifact@v2
       with:
        name: Artifacts
