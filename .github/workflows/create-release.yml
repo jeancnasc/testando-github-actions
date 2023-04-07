@@ -58,3 +58,5 @@ jobs:
     - name: Create Release
       id: create_release
       run: gh release create v${{ github.event.inputs.version }} artifacts/*.jar --draft --prerelease
+      env: 
+        GH_TOKEN: ${{ github.token }}
