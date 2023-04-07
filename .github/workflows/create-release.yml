@@ -5,10 +5,10 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version  (ie 5.5.0)'
+        description: 'Versão  (ie 5.5.0)'
         required: true
       beta:
-        description: 'Is Beta Release? (0 - Stable, 1 - Beta)'
+        description: 'Pre-release? (0 - Stable, 1 - Beta)'
         default: '1'
         required: true
         
@@ -36,7 +36,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     - name: Atualizar versão
       run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.version }} -DgenerateBackupPoms=false
-    - name: Create Release Branch
+    - name: Criar Branch de Release
       run: |
         git checkout -b release/${{ github.event.inputs.version }}
         git config user.name github-actions
@@ -45,18 +45,10 @@ jobs:
         git commit -m "Release ${{ github.event.inputs.version }}"
         git push origin release/${{ github.event.inputs.version }}
     - run: mkdir artifacts
-    - name: Build with Maven
+    - name: Construir Artefatos
       run: mvn -B package --file pom.xml dependency:copy -Dartifact=\${project.groupId}:\${project.artifactId}:\${project.version} -DoutputDirectory=artifacts    
-    - uses: actions/upload-artifact@v2
-      with:
-       name: Artifacts
-       path: artifacts/*
-      #    - name: Publish to GitHub Packages Apache Maven
-      #      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-      #      env:
-      #       GITHUB_TOKEN: ${{ github.token }}
-    - name: Create Release
+    - name: Criar Release
       id: create_release
-      run: gh release create v${{ github.event.inputs.version }} artifacts/*.jar --draft --prerelease
+      run: gh release create v${{ github.event.inputs.version }} artifacts/*.jar --title=v${{ github.event.inputs.version }} --draft --prerelease
       env: 
         GH_TOKEN: ${{ github.token }}
