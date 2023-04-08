@@ -1,5 +1,4 @@
 name: Create Release
-run-name: v$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 on:
   workflow_dispatch:
