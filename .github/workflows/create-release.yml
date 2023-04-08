@@ -1,5 +1,5 @@
 name: Create Release
-run-name: v${{ inputs.version }}
+run-name: v$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 on:
   workflow_dispatch:
@@ -35,20 +35,20 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     - name: Atualizar versão
-      run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.version }} -DgenerateBackupPoms=false
+      run: mvn -B build-helper:parse-version versions:set -DnewVersion=${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
     - name: Criar Branch de Release
       run: |
-        git checkout -b release/${{ github.event.inputs.version }}
+        git checkout -b release/$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         git config user.name github-actions
         git config user.email noreply@github.com
         git add *pom.xml
-        git commit -m "Release ${{ github.event.inputs.version }}"
-        git push origin release/${{ github.event.inputs.version }}
+        git commit -m "Release $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+        git push origin release/$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
     - run: mkdir artifacts
     - name: Construir Artefatos
       run: mvn -B package --file pom.xml dependency:copy -Dartifact=\${project.groupId}:\${project.artifactId}:\${project.version} -DoutputDirectory=artifacts    
     - name: Criar Release
       id: create_release
-      run: gh release create v${{ github.event.inputs.version }} artifacts/*.jar --title=v${{ github.event.inputs.version }} --draft --prerelease
+      run: gh release create v$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) artifacts/*.jar --title=v$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) --draft --prerelease
       env: 
         GH_TOKEN: ${{ github.token }}
