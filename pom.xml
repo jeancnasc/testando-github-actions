@@ -4,7 +4,7 @@
   <groupId>br.com.jeancnasc.testando.github.actions</groupId>
   <artifactId>testando-github-actions</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>testando-github-actions</name>
 
   <properties>
